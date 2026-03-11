@@ -1,0 +1,24 @@
+CLASS AND OBJECT
+#include<iostream>
+using name space std;
+class student
+{
+public:
+int rno,marks:
+public:
+void read()
+{
+cout<<"enter rno and marks";
+cin>>rno>>marks;
+}
+void display()
+{
+cout<<"rno is:"<<rno<<end1<<mark is:"<<mark";
+}
+};
+int main()
+{
+student s1;
+S1.read();
+S1.display();
+}
