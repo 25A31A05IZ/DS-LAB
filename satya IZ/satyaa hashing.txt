@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    string key;
+    struct Node* next;
+};
+
+class HashTable {
+private:
+    static const int BUCKET_COUNT = 7;
+    struct Node* table[BUCKET_COUNT];
+
+    int hashFunction(string key) {
+        int sum = 0;
+        for (char c : key) {
+            sum += c;
+        }
+        return sum % BUCKET_COUNT;
+    }
+
+public:
+    HashTable() {
+        for (int i = 0; i < BUCKET_COUNT; i++) {
+            table[i] = nullptr;
+        }
+    }
+
+    void insert(string key) {
+        int index = hashFunction(key);
+        struct Node* newNode = new struct Node();
+        newNode->key = key;
+        newNode->next = table[index];
+        table[index] = newNode;
+    }
+
+    bool search(string key) {
+        int index = hashFunction(key);
+        struct Node* current = table[index];
+        while (current != nullptr) {
+            if (current->key == key) {
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
+
+    ~HashTable() {
+        for (int i = 0; i < BUCKET_COUNT; i++) {
+            struct Node* current = table[i];
+            while (current != nullptr) {
+                struct Node* temp = current;
+                current = current->next;
+                delete temp;
+            }
+        }
+    }
+};
+
+int main() {
+    HashTable ht;
+
+    // Elements inserted directly
+    ht.insert("Apple");
+    ht.insert("Banana");
+    ht.insert("Mango");
+
+    // Elements searched directly
+    cout << ht.search("Apple") << endl;  // Outputs 1 (True)
+    cout << ht.search("Banana") << endl; // Outputs 1 (True)
+    cout << ht.search("Mango") << endl;  // Outputs 1 (True)
+    cout << ht.search("Grape") << endl;  // Outputs 0 (False)
+
+    return 0;
+}
+

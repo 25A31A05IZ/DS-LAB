@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    char data;
+    struct Node* next;
+};
+
+class Stack {
+private:
+    struct Node* top;
+
+public:
+    Stack() {
+        top = nullptr;
+    }
+
+    void push(char letter) {
+        struct Node* newNode = new struct Node();
+        newNode->data = letter;
+        newNode->next = top;
+        top = newNode;
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            return;
+        }
+        struct Node* temp = top;
+        top = top->next;
+        delete temp;
+    }
+
+    char peek() {
+        if (isEmpty()) {
+            return '\0'; 
+        }
+        return top->data;
+    }
+
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    ~Stack() {
+        while (!isEmpty()) {
+            pop();
+        }
+    }
+};
+
+int main() {
+    Stack s;
+
+    // Elements inserted directly
+    s.push('A');
+    s.push('B');
+    s.push('C');
+
+    // Displaying elements via top/peek
+    cout << s.peek() << endl; // Outputs C
+
+    s.pop();
+    cout << s.peek() << endl; // Outputs B
+
+    s.pop();
+    cout << s.peek() << endl; // Outputs A
+
+    s.pop();
+    return 0;
+}
+

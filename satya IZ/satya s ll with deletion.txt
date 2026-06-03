@@ -1,0 +1,135 @@
+#include <iostream>
+using namespace std;
+
+// Define the Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+// 1. Delete from the Beginning
+void deleteFromBeginning(Node*& head) {
+    if (head == NULL) {
+        cout << "List is empty. Nothing to delete.\n";
+        return;
+    }
+
+    Node* temp = head;     // Save the current head node
+    head = head->next;     // Move head pointer to the next node
+    cout << "Deleted " << temp->data << " from the beginning.\n";
+    delete temp;           // Free the memory of old head
+}
+
+// 2. Delete from the End
+void deleteFromEnd(Node*& head) {
+    if (head == NULL) {
+        cout << "List is empty. Nothing to delete.\n";
+        return;
+    }
+
+    // Edge case: If there is only one node in the list
+    if (head->next == NULL) {
+        cout << "Deleted " << head->data << " from the end.\n";
+        delete head;
+        head = NULL;
+        return;
+    }
+
+    // Traverse to the second-to-last node
+    Node* temp = head;
+    while (temp->next->next != NULL) {
+        temp = temp->next;
+    }
+
+    cout << "Deleted " << temp->next->data << " from the end.\n";
+    delete temp->next;     // Free memory of the very last node
+    temp->next = NULL;     // Set the new last node's next to NULL
+}
+
+// 3. Delete from a Given Position (1-based index)
+void deleteFromPosition(Node*& head, int position) {
+    if (head == NULL) {
+        cout << "List is empty. Nothing to delete.\n";
+        return;
+    }
+
+    if (position < 1) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    // If deleting the first node, call the existing function
+    if (position == 1) {
+        deleteFromBeginning(head);
+        return;
+    }
+
+    // Traverse to the node just before the one we want to delete
+    Node* temp = head;
+    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    // Check if the target position or node actually exists
+    if (temp == NULL || temp->next == NULL) {
+        cout << "Position out of bounds!\n";
+    } else {
+        Node* nodeToDelete = temp->next;
+        temp->next = temp->next->next; // Bypass the node being deleted
+        cout << "Deleted " << nodeToDelete->data << " from position " << position << ".\n";
+        delete nodeToDelete;           // Free memory
+    }
+}
+
+// Utility function to print the list
+void displayList(Node* head) {
+    if (head == NULL) {
+        cout << "List is empty." << endl;
+        return;
+    }
+    cout << "Linked List: ";
+    Node* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " -> ";
+        temp = temp->next;
+    }
+    cout << "NULL" << endl;
+}
+
+// Helper function to build a sample list for testing
+void buildSampleList(Node*& head) {
+    head = new Node(); head->data = 10;
+    head->next = new Node(); head->next->data = 20;
+    head->next->next = new Node(); head->next->next->data = 30;
+    head->next->next->next = new Node(); head->next->next->next->data = 40;
+    head->next->next->next->next = new Node(); head->next->next->next->next->data = 50;
+    head->next->next->next->next->next = NULL;
+}
+
+int main() {
+    Node* head = NULL;
+
+    // Create a setup list: 10 -> 20 -> 30 -> 40 -> 50 -> NULL
+    buildSampleList(head);
+    cout << "Initial list loaded:\n";
+    displayList(head);
+    cout << "----------------------------------------\n\n";
+
+    // Test 1: Delete from beginning
+    deleteFromBeginning(head);
+    displayList(head); // Expected: 20 -> 30 -> 40 -> 50 -> NULL
+    cout << endl;
+
+    // Test 2: Delete from end
+    deleteFromEnd(head);
+    displayList(head); // Expected: 20 -> 30 -> 40 -> NULL
+    cout << endl;
+
+    // Test 3: Delete from position 2 (removes 30)
+    deleteFromPosition(head, 2);
+    displayList(head); // Expected: 20 -> 40 -> NULL
+    cout << endl;
+
+    return 0;
+}
+

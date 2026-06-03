@@ -1,0 +1,82 @@
+#include <iostream>
+using namespace std;
+
+// Define a Node structure holding character data
+struct Node {
+    char data;
+    struct Node* next; // Added 'struct' for strict compiler compatibility
+};
+
+// Define the Stack class
+class Stack {
+private:
+    struct Node* top; // Added 'struct' here
+
+public:
+    // Constructor
+    Stack() {
+        top = nullptr;
+    }
+
+    // Push: Add a character to the top
+    void push(char letter) {
+        // FIXED LINE 18: Added 'struct' explicitly to satisfy the compiler
+        struct Node* newNode = new struct Node(); 
+        newNode->data = letter;
+        newNode->next = top;
+        top = newNode;
+        cout << "'" << letter << "' pushed into stack.\n";
+    }
+
+    // Pop: Remove the top character
+    void pop() {
+        if (isEmpty()) {
+            return;
+        }
+        struct Node* temp = top; // Added 'struct' here
+        top = top->next;
+        cout << "'" << temp->data << "' popped from stack.\n";
+        delete temp;
+    }
+
+    // Peek: View the top character
+    char peek() {
+        if (isEmpty()) {
+            return '\0'; 
+        }
+        return top->data;
+    }
+
+    // IsEmpty: Check if stack has no items
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    // Destructor to free memory safely
+    ~Stack() {
+        while (!isEmpty()) {
+            pop();
+        }
+    }
+};
+
+int main() {
+    Stack s;
+
+    // Push letters into the stack
+    s.push('A');
+    s.push('B');
+    s.push('C');
+
+    cout << "Top element is: " << s.peek() << endl;
+
+    // Pop elements safely
+    s.pop();
+    cout << "Top element after pop is: " << s.peek() << endl;
+
+    s.pop();
+    s.pop();
+
+    return 0;
+}
+

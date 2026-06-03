@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+
+// Define the Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Insert a node at the very beginning
+void insertAtBeginning(Node*& head, int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->next = head;
+    head = newNode;
+    cout << "Inserted " << value << " at the beginning.\n";
+}
+
+// Insert a node at the very end
+void insertAtEnd(Node*& head, int value) {
+    Node* newNode = new Node();
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+
+    Node* temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    cout << "Inserted " << value << " at the end.\n";
+}
+
+// Insert a node at a given position (1-based index)
+void insertAtPosition(Node*& head, int value, int position) {
+    if (position < 1) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    if (position == 1) {
+        insertAtBeginning(head, value);
+        return;
+    }
+
+    Node* newNode = new Node();
+    newNode->data = value;
+
+    Node* temp = head;
+    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        cout << "Position out of bounds!\n";
+        delete newNode;
+    } else {
+        newNode->next = temp->next;
+        temp->next = newNode;
+        cout << "Inserted " << value << " at position " << position << ".\n";
+    }
+}
+
+// Display the linked list
+void displayList(Node* head) {
+    if (head == NULL) {
+        cout << "List is empty." << endl;
+        return;
+    }
+    cout << "Linked List: ";
+    Node* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " -> ";
+        temp = temp->next;
+    }
+    cout << "NULL" << endl;
+}
+
+int main() {
+    Node* head = NULL; // Initialize empty list
+
+    // 1. Insert at the End
+    insertAtEnd(head, 10);
+    insertAtEnd(head, 20);
+    displayList(head);
+
+    // 2. Insert at the Beginning
+    insertAtBeginning(head, 5);
+    displayList(head);
+
+    // 3. Insert at a Specific Position
+    insertAtPosition(head, 15, 3); // Insert 15 at position 3
+    displayList(head);
+
+    return 0;
+}
+
